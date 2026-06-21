@@ -707,8 +707,7 @@ async function seedLegalData() {
 
     for (const resDoc of resources) {
       const exists = await Resource.findOne({
-        sourceUrl: resDoc.sourceUrl,
-        tags: resDoc.tags[0]
+        'title.en': resDoc.title.en
       });
 
       if (!exists) {
