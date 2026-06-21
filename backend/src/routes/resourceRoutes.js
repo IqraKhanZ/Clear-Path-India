@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
         { 'title.hi': searchRegex },
         { 'description.en': searchRegex },
         { 'description.hi': searchRegex },
-        { tags: { $in: [searchRegex] } }
+        { tags: searchRegex }
       ];
     }
 
