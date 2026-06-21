@@ -41,6 +41,14 @@ app.get('/ping', (req, res) => {
   return res.status(200).send('PONG');
 });
 
+// Root route
+app.get('/', (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: 'ClearPath India API Server is running successfully.'
+  });
+});
+
 // Database connection and routing middleware
 app.use(async (req, res, next) => {
   try {
