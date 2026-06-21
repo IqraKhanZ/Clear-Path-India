@@ -262,7 +262,7 @@ const ResourcesPage = () => {
                   <h2 className="text-[11px] font-extrabold text-textMuted uppercase tracking-wider mb-2.5">
                     {t('res.rightsHeader')}
                   </h2>
-                  <div className="flex overflow-x-auto gap-3 pb-2 -mx-4 px-4 scrollbar-none snap-x">
+                  <div className="flex flex-col gap-3">
                     {rights.map(art => {
                       const ArtIcon = getIcon(art.iconName);
                       const isBookmarked = savedResources.some(r => r.id === art.id);
@@ -270,28 +270,37 @@ const ResourcesPage = () => {
                       return (
                         <div
                           key={art.id}
-                          className="w-40 h-[120px] border border-gray-200 rounded-xl bg-white p-3 shrink-0 flex flex-col justify-between hover:border-primary snap-center shadow-sm relative group"
+                          className="w-full border border-gray-200 rounded-xl bg-white p-4 flex flex-col justify-between hover:border-primary shadow-sm relative group"
                         >
                           <button
                             type="button"
                             onClick={() => handleToggleBookmark(art)}
-                            className="absolute top-2.5 right-2.5 text-textMuted hover:text-primary transition-colors focus:outline-none"
+                            className="absolute top-3.5 right-3.5 text-textMuted hover:text-primary transition-colors focus:outline-none"
                             aria-label="Bookmark resource"
                           >
                             {isBookmarked ? <BookmarkCheck size={16} className="text-primary" /> : <Bookmark size={16} />}
                           </button>
-                          <div>
-                            <ArtIcon size={16} className="text-primary mb-1 shrink-0" />
-                            <h3 className="text-xs font-bold text-textPrimary leading-tight line-clamp-2 pr-4">
-                              {art.title}
-                            </h3>
+                          <div className="flex items-start gap-3.5 pr-8">
+                            <div className="p-2 bg-blue-50 rounded-lg text-primary shrink-0">
+                              <ArtIcon size={18} />
+                            </div>
+                            <div className="space-y-1">
+                              <h3 className="text-sm font-bold text-textPrimary leading-snug">
+                                {art.title}
+                              </h3>
+                              <p className="text-xs text-textMuted line-clamp-2 leading-relaxed">
+                                {art.content}
+                              </p>
+                            </div>
                           </div>
-                          <button
-                            onClick={() => handleReadRight(art.title, art.content)}
-                            className="text-[11px] font-extrabold text-primary hover:underline text-left"
-                          >
-                            {t('res.readBtn')} →
-                          </button>
+                          <div className="mt-4 flex justify-end border-t border-gray-50 pt-3">
+                            <button
+                              onClick={() => handleReadRight(art.title, art.content)}
+                              className="text-xs font-extrabold text-primary hover:underline"
+                            >
+                              {t('res.readBtn')} →
+                            </button>
+                          </div>
                         </div>
                       );
                     })}
