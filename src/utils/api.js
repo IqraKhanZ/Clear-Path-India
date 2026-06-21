@@ -1,11 +1,28 @@
 import i18n from 'i18next';
+import { auth } from '../config/firebase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// Trim trailing slashes from BASE_URL
+let BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+if (BASE_URL.endsWith('/')) {
+  BASE_URL = BASE_URL.slice(0, -1);
+}
 
-const getHeaders = () => {
-  return {
+const getHeaders = async () => {
+  const headers = {
     'Content-Type': 'application/json',
   };
+  
+  try {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const token = await currentUser.getIdToken();
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  } catch (err) {
+    console.error('Failed to get Firebase ID token:', err);
+  }
+  
+  return headers;
 };
 
 const handleResponse = async (response) => {
@@ -28,7 +45,6 @@ const handleError = (error) => {
   if (error.message === 'Unauthorized') {
     throw error;
   }
-  // Handle connection/network errors
   if (error.name === 'TypeError' || error.message.includes('Failed to fetch') || error.message.includes('fetch')) {
     const netErrorMsg = i18n.language === 'hi'
       ? 'सर्वर से कनेक्ट करने में विफल। कृपया अपना इंटरनेट कनेक्शन जांचें।'
@@ -41,9 +57,10 @@ const handleError = (error) => {
 export const api = {
   get: async (path) => {
     try {
+      const headers = await getHeaders();
       const response = await fetch(`${BASE_URL}${path}`, {
         method: 'GET',
-        headers: getHeaders(),
+        headers,
         credentials: 'include',
       });
       return await handleResponse(response);
@@ -54,9 +71,10 @@ export const api = {
   
   post: async (path, body) => {
     try {
+      const headers = await getHeaders();
       const response = await fetch(`${BASE_URL}${path}`, {
         method: 'POST',
-        headers: getHeaders(),
+        headers,
         credentials: 'include',
         body: JSON.stringify(body),
       });
@@ -68,9 +86,10 @@ export const api = {
   
   patch: async (path, body) => {
     try {
+      const headers = await getHeaders();
       const response = await fetch(`${BASE_URL}${path}`, {
         method: 'PATCH',
-        headers: getHeaders(),
+        headers,
         credentials: 'include',
         body: JSON.stringify(body),
       });
@@ -82,9 +101,10 @@ export const api = {
   
   del: async (path) => {
     try {
+      const headers = await getHeaders();
       const response = await fetch(`${BASE_URL}${path}`, {
         method: 'DELETE',
-        headers: getHeaders(),
+        headers,
         credentials: 'include',
       });
       return await handleResponse(response);
