@@ -1,0 +1,23 @@
+{
+  "name": "clearpath-india-backend",
+  "version": "1.0.0",
+  "description": "ClearPath India housing guidance assistant backend",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "seed:legal": "node src/utils/seedLegalData.js",
+    "seed:all": "npm run seed:legal"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^12.1.0",
+    "mongoose": "^8.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
